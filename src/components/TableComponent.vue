@@ -1,21 +1,21 @@
 <template>
   <div className="App">
-    <Sort :sortOptions="sortOptions" />
-    <Filters :filterOptions="filterOptions" />
+    <Sort :sortOptions="sortOptions" @sort="sort" />
+    <Filters :filterOptions="filterOptions" @filter="filter" />
     <table>
       <thead>
         <tr>
           <th>Name</th>
+          <th>Description</th>
           <th>Type</th>
           <th>Age</th>
-          <th>Description</th>
           <th>Greet</th>
         </tr>
       </thead>
       <tbody>
         <animal-line
-          v-for="animal in animalList"
-          :key="animal"
+          v-for="animal in listToRender"
+          :key="animal.name"
           :animal="animal"
         />
       </tbody>
@@ -25,7 +25,7 @@
 
 <script lang="ts">
 import { Animal } from "@/types/types";
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Vue, Watch } from "vue-property-decorator";
 import AnimalLine from "./AnimalLine.vue";
 import Button from "./table-options/Button.vue";
 import Filters from "./table-options/Filters.vue";
@@ -36,12 +36,55 @@ import Sort from "./table-options/Sort.vue";
     AnimalLine,
     Button,
     Sort,
-    Filters
+    Filters,
   },
 })
 export default class TableComponent extends Vue {
-  get animalList(): Array<Animal> {
+  //variables need to have a value for Vue to re-render them => using null instead of undefined
+  sortOption?: keyof Animal = "name";
+  filterOption: keyof Animal = "type";
+  filterValue: string | null = null;
+
+  get animalList(): Animal[] {
     return this.$store.getters.getCleanData;
+  }
+
+  get sortedList() {
+    return this.animalList.sort(this.compareFunction);
+  }
+
+  get listToRender() {
+    console.log(this.filterValue);
+    return this.sortedList.filter((animal) =>
+      this.filterValue ? animal["type"] === this.filterValue : animal
+    );
+  }
+
+  sort(type: keyof Animal) {
+    this.sortOption = type;
+  }
+
+  filter(value: string) {
+    if (this.filterValue !== value) {
+      this.filterValue = value;
+    } else {
+        this.filterValue = null
+    }
+
+  }
+
+  compareFunction(a: Animal, b: Animal) {
+    if (!this.sortOption) {
+      return 0;
+    }
+
+    if (a[this.sortOption] > b[this.sortOption]) {
+      return 1;
+    } else if (a[this.sortOption] < b[this.sortOption]) {
+      return -1;
+    } else {
+      return 0;
+    }
   }
 
   //If you can not write something directly, then deduce it!
@@ -53,7 +96,8 @@ export default class TableComponent extends Vue {
 
   //use of map
   get filterOptions(): Array<string> {
-    return this.animalList.map((animal) => animal.type);
+    const allTypes = this.animalList.map((animal) => animal.type);
+    return [...new Set(allTypes)];
   }
 }
 </script>

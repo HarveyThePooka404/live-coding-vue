@@ -1,7 +1,7 @@
 <template>
       <fieldset class="fieldset">
         <legend>Filter</legend>
-        <Button v-for="option in filterOptions" :key="option" :title="option" />
+        <Button v-for="option in filterOptions" :key="option" :title="option" @click="filter(option)"/>
       </fieldset>
 </template>
     
@@ -16,6 +16,10 @@ import Button from './Button.vue';
 })
 export default class Filters extends Vue {
     @Prop({default: []}) filterOptions!: string[]
+
+    filter(e: any) {
+        this.$emit("filter", e)
+    }
 }
 </script>
     

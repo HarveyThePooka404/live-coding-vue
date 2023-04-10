@@ -10,7 +10,7 @@ export default class Button extends Vue {
     @Prop({default: 'Default Title'}) title!: string
 
 onClick() {
-    console.log("you've clicked that")
+    this.$emit("click")
 }
 }
 </script>
