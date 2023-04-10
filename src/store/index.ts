@@ -1,3 +1,4 @@
+import { Animal, RawAnimal } from "@/types/types";
 import Vue from "vue";
 import Vuex from "vuex";
 
@@ -30,7 +31,7 @@ export default new Vuex.Store({
           "fullname": "Horsey the horsing horse",
           "age": 10
       }
-  ]
+  ] as Array<RawAnimal> 
   },
   getters: {
     getCleanData(state) {
@@ -41,7 +42,7 @@ export default new Vuex.Store({
           description: description,
           type: type,
           age: ani.age,
-        };
+        } as Animal;
       });
       return nextAnimals;
     }

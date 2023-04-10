@@ -1,18 +1,28 @@
 <template>
-     <div>
-         <p>Hello</p>
-     </div>
+<tr>
+      <td> {{animal.name}}</td>
+      <td> {{animal.description}}</td>
+      <td> {{animal.type}}</td>
+      <td> {{animal.age}}</td>
+
+      <td>
+        <button onClick={local}>Greet</button>
+      </td>
+    </tr>
 </template>
     
 <script lang='ts'>
-import { Component, Vue } from 'vue-property-decorator';
+import { Animal } from '@/types/types';
+import { Component, Prop, Vue } from 'vue-property-decorator';
     
 @Component({})
 export default class AnimalLine extends Vue {
-
+     @Prop() animal!: Animal
 }
 </script>
-    
-<style lang='scss'>
-     @use '@/assets/stylesheet.scss' as stylesheet;
+
+<style scoped>
+.animal-entry {
+     display: flex;
+}
 </style>

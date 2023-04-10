@@ -1,24 +1,22 @@
 <template>
   <div class="table">
-    <li v-for="animal in animalList" :key="animal.name">
-        {{animal}}
-    </li>
+    <TableComponent />
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
-import  store  from "../store"
+import { Component, Vue } from "vue-property-decorator";
+import AnimalLine from "./AnimalLine.vue";
+import TableComponent from "./TableComponent.vue";
 
-@Component
-export default class Table extends Vue {
-  @Prop({ default: "Hello darlings"}) msg!: string;
+@Component({
+  components: {
+    AnimalLine, 
+    TableComponent 
+  },
+})
+export default class Table extends Vue {}
 
-  get animalList() {
-    return this.$store.getters.getCleanData
-  }
-  
-}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
