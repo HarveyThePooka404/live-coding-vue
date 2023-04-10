@@ -1,7 +1,7 @@
 <template>
   <div className="App">
-    <Sort :sortOptions="sortOptions" @sort="sort" />
-    <Filters :filterOptions="filterOptions" @filter="filter" />
+    <Sort :sortOptions="sortOptions" @sort="sort" :current="sortOption"/>
+    <Filters :filterOptions="filterOptions" @filter="filter" :current="filterValue"/>
     <table>
       <thead>
         <tr>
@@ -41,8 +41,7 @@ import Sort from "./table-options/Sort.vue";
 })
 export default class TableComponent extends Vue {
   //variables need to have a value for Vue to re-render them => using null instead of undefined
-  sortOption?: keyof Animal = "name";
-  filterOption: keyof Animal = "type";
+  sortOption?: keyof Animal | null = null;
   filterValue: string | null = null;
 
   get animalList(): Animal[] {
@@ -54,7 +53,6 @@ export default class TableComponent extends Vue {
   }
 
   get listToRender() {
-    console.log(this.filterValue);
     return this.sortedList.filter((animal) =>
       this.filterValue ? animal["type"] === this.filterValue : animal
     );
@@ -74,6 +72,7 @@ export default class TableComponent extends Vue {
   }
 
   compareFunction(a: Animal, b: Animal) {
+    //return early pattern
     if (!this.sortOption) {
       return 0;
     }

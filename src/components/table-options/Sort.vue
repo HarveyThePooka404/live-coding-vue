@@ -1,7 +1,7 @@
 <template>
       <fieldset class="fieldset">
         <legend>Sort</legend>
-        <Button v-for="option in sortOptions" :key="option" :title="option" @click="sort(option)"/>
+        <Button v-for="option in sortOptions" :key="option" :title="option" @click="sort(option)" :isActive="current === option ? true: false"/>
       </fieldset>
 </template>
     
@@ -16,8 +16,10 @@ import Button from './Button.vue';
 })
 export default class Sort extends Vue {
     @Prop({default: []}) sortOptions!: string[]
+    @Prop() current!: string;
 
     sort(e: any) {
+
         this.$emit("sort", e)
     }
 }
